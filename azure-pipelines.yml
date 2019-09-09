@@ -65,24 +65,6 @@ stages:
           $r = Invoke-ScriptAnalyzer –Path ./dist –Recurse | Where-Object severity -ne "Information"
           $r | ForEach-Object {Write-Host "##vso[task.logissue type=$($_.Severity);sourcepath=$($_.ScriptPath);linenumber=$($_.Line);columnnumber=$($_.Column);]$($_.Message)"}
 
-    - task: CredScan@2
-      displayName: 'Run CredScan'
-      inputs:
-        suppressionsFile: '$(Build.SourcesDirectory)/build/credscan-supression.json'
-
-    - task: SdtReport@1
-      displayName: 'Create Security Analysis Report'
-      inputs:
-        AllTools: true
-
-    - task: PublishSecurityAnalysisLogs@2
-      displayName: 'Publish Security Analysis Logs'
-
-    - task: PostAnalysis@1
-      displayName: 'Post Analysis'
-      inputs:
-        AllTools: true
-
     - task: CopyFiles@2
       displayName: 'Copy Module to Artifacts Folder'
       inputs:
